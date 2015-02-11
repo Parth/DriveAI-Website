@@ -356,7 +356,7 @@
 			<div class="col-lg-7">
 				<h3>Email your local legislator and let them know that this is important</h3>
 				<br>
-				<form role="form" action="#" method="post" enctype="plain"> 
+				<form role="form" method="post" enctype="plain" id="legislator-email-form"> 
 				  <div class="form-group">
 				    <label for="name1">Your Name</label>
 				    <input type="name" name="Name" class="form-control" id="name1" placeholder="Your Name" required>
@@ -376,7 +376,8 @@
 				  	<textarea id="email-body" class="form-control" name="Message" rows="3"></textarea>
 				  </div>
 				  <br>
-				  <button type="submit" class="btn btn-large btn-success" disabled>SUBMIT</button>
+				  <button id="send-message" type="submit" class="btn btn-large btn-success">SUBMIT</button>
+                  <div id="confirm-message"></div>
 				</form>
 			</div>
 		</div>
@@ -396,6 +397,27 @@
 	$('.carousel').carousel({
 	  interval: 3500
 	})
+    $("#legislator-email-form").submit(function() {
+
+        var url = "https://zapier.com/hooks/catch/oc0evf/";
+
+        $.ajax({
+               type: "POST",
+               url: url,
+               data: $("#legislator-email-form").serialize(),
+               success: function(data)
+               {
+                   $("#confirm-message").html("Sent email!");
+                   $("#send-message").prop('disabled', true);
+               },
+               error: function(data)
+               {
+                   $("#confirm-message").html("Error sending email! Contact praful@derivatived.com for assistance."); 
+               }
+             });
+
+        return false;
+    });
 	</script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
   </body>
