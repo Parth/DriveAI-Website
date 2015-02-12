@@ -157,7 +157,7 @@
                                   if(phone){
                                       $('#leg-info').append('<div>'+phone+'</div>');
                                   };
-                                  $("html, body").animate({ scrollTop: $(document).height() - 900 }, 1000);
+                                  $('textarea').prop('rows', 20);
                               })
             });
         }
@@ -389,7 +389,7 @@
                   <input type="hidden" name="legislator_email" id="leg-email" />
 				  <div class="form-group">
 				  	<label>Your Text</label>
-				  	<textarea id="email-body" class="form-control" name="Message" rows="20"></textarea>
+				  	<textarea id="email-body" class="form-control" name="Message" rows="1"></textarea>
 				  </div>
 				  <br>
 				  <button id="send-message" type="submit" class="btn btn-large btn-success">SUBMIT</button>
