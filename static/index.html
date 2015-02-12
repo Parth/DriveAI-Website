@@ -77,6 +77,14 @@
                 types: ['geocode'],
             };
                         
+            var email_body = 'Dear Assemblyperson:\n\n';
+            email_body += "I am a constituent that lives in your district and I am voicing my support for Assembly Bill A-1326 which would direct the NJ Motor Vehicle Commission (MVC) to establish a driver's license endorsement for the operation of autonomous vehicles in our state. \n\n"
+            email_body += "I believe such a law would ensure that these vehicles adhere to MVC standards governing vehicle registration, safety, inspection, and insurance. Once enacted, the law ultimately will have a positive impact on commerce, offer more choices to consumers, and result in more jobs for New Jersey residents. There is a strong community of developers in New Jersey working on the technical challenges at Princeton University, Rutgers University, Munich Re Insurance, DriveAI.com, and derivatived.com\n\n";
+            email_body += "As a supporter of their efforts and a strong proponent for New Jersey's economic development through high-tech, I encourage you to support this important bill for the future of New Jersey.\n\n";
+            email_body += "Let's get back to being innovators again!\n\n";
+            email_body += "Sincerely,\n";
+            $('#email-body').val(email_body);
+
             var autocomplete = new google.maps.places.Autocomplete(input, options);
             google.maps.event.addListener(autocomplete, 'place_changed', function() {
                 $('#leg-info').remove();
@@ -105,7 +113,6 @@
                                   var email = random_assembly_person['email'];
                                   var random_assembly_person_last_name = random_assembly_person['last_name'];
 
-                                  console.log(random_assembly_person);
                                   if (assembly_person_gender == 'Male') {
                                       if(!email){
                                           email = 'asm';
@@ -135,7 +142,6 @@
                                   }
 
 
-                                  console.log(email);
                                   var email_body = 'Dear Assembly'+assembly_gender+' '+random_assembly_person_last_name+':\n\n';
                                   email_body += "I am a constituent that lives in your district and I am voicing my support for Assembly Bill A-1326 which would direct the NJ Motor Vehicle Commission (MVC) to establish a driver's license endorsement for the operation of autonomous vehicles in our state. \n\n"
                                   email_body += "I believe such a law would ensure that these vehicles adhere to MVC standards governing vehicle registration, safety, inspection, and insurance. Once enacted, the law ultimately will have a positive impact on commerce, offer more choices to consumers, and result in more jobs for New Jersey residents. There is a strong community of developers in New Jersey working on the technical challenges at Princeton University, Rutgers University, Munich Re Insurance, DriveAI.com, and derivatived.com\n\n";
@@ -396,7 +402,7 @@
                   <input type="hidden" name="legislator_phone" id="leg-phone" />
 				  <div class="form-group">
 				  	<label>Your Text</label>
-				  	<textarea id="email-body" class="form-control" name="Message" rows="1"></textarea>
+				  	<textarea id="email-body" class="form-control" name="Message" rows="10"></textarea>
 				  </div>
 				  <br>
 				  <button id="send-message" type="submit" class="btn btn-large btn-success">SUBMIT</button>
