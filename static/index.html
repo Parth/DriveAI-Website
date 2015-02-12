@@ -158,7 +158,8 @@
                                   $('#leg-load').hide();
                                   $('#address').after('<div id="leg-info"></div>');
                                   $('#leg-info').append('<strong>Your Representative:</strong><br/>');
-                                  $('#leg-info').append('<img id="leg-photo" width="100px" src="'+random_assembly_person['photo_url']+'" />');
+                                  var openstates_url = 'http://openstates.org/'+random_assembly_person['state']+'/legislators/'+random_assembly_person['id'];
+                                  $('#leg-info').append('<a target="_blank" href="'+openstates_url+'"><img id="leg-photo" width="100px" src="'+random_assembly_person['photo_url']+'" /></a>');
                                   $('#leg-info').append('<div><b>Assembly'+assembly_gender+'</b> '+random_assembly_person['first_name']+' '+random_assembly_person_last_name+'</div>');
                                   $('#leg-info').append('<div><b>District:</b> '+random_assembly_person['district']+'</div>');
                                   $('#leg-info').append('<div><b>Email:</b> '+email+'</div>');
@@ -329,14 +330,14 @@
             <br>
             <div class="row show-grid">
                 <div class="col-lg-4 col-lg-offset-2">
-                    <img src="assets/img/AssJohnWisniewski.jpg" alt="Assemblyman Wisniewski">
+                    <a href="http://openstates.org/nj/legislators/NJL000058/john-s-wisniewski/"><img src="assets/img/AssJohnWisniewski.jpg" alt="Assemblyman Wisniewski"></a>
                     <div class="img-caption">
                         <span>Assemblyman Wisniewski</span>
                     </div>
                 </div>
 
                 <div class="col-lg-4 col-lg-offset-2">
-                    <img src="assets/img/AssAnneteQuijano.jpg" alt="Assemblywoman Quijano">
+                    <a href="http://openstates.org/nj/legislators/NJL000062/annette-quijano/"><img src="assets/img/AssAnneteQuijano.jpg" alt="Assemblywoman Quijano"></a>
                     <div class="img-caption">
                         <span>Assemblyman Quijano</span>
                     </div>
@@ -347,14 +348,14 @@
 
             <div class="row show-grid">
                 <div class="col-lg-4 col-lg-offset-2">
-                    <img src="assets/img/AssThomasPGiblin.jpg" alt="Assemblyman Giblin">
+                    <a href="http://openstates.org/nj/legislators/NJL000105/thomas-p-giblin/"><img src="assets/img/AssThomasPGiblin.jpg" alt="Assemblyman Giblin"></a>
                     <div class="img-caption">
                         <span>Assemblyman Giblin</span>
                     </div>
                 </div>
 
                 <div class="col-lg-4 col-lg-offset-2">
-                    <img src="assets/img/AssRalphRCaputo.jpg" alt="Assemblyman Caputo">
+                    <a href="http://openstates.org/nj/legislators/NJL000086/ralph-r-caputo/"><img src="assets/img/AssRalphRCaputo.jpg" alt="Assemblyman Caputo"></a>
                     <div class="img-caption">
                         <span>Assemblyman Caputo</span>
                     </div>
