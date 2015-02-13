@@ -154,6 +154,7 @@
                                   var phone = random_assembly_person['+phone'];
                                   $('#leg-email').val(email);
                                   $('#leg-phone').val(phone);
+                                  $('#leg-district').val(random_assembly_person['district']);
                                   $('#leg-load').hide();
                                   $('#address').after('<div id="leg-info"></div>');
                                   $('#leg-info').append('<strong>Your Representative:</strong><br/>');
@@ -400,6 +401,7 @@
 				  </div>
                   <input type="hidden" name="legislator_email" id="leg-email" />
                   <input type="hidden" name="legislator_phone" id="leg-phone" />
+                  <input type="hidden" name="legislator_district" id="leg-district" />
 				  <div class="form-group">
 				  	<label>Your Text</label>
 				  	<textarea id="email-body" class="form-control" name="Message" rows="10"></textarea>
