@@ -17,11 +17,24 @@ h1, h2, h3, h4, h5, h6 {
     color: #333;
 }
 
+h1{
+	font-weight: 700;
+}
+
+h2 {
+	font-size: 20px;
+	font-weight: 700;
+}
+
+h3 {
+	font-size: 24px !important;
+}
 
 /* Paragraph & Typographic */
 p {
-    line-height: 28px;
+    line-height: 24px;
     margin-bottom: 25px;
+    font-weight: 500;
 }
 
 .centered {
@@ -30,7 +43,7 @@ p {
 
 /* Links */
 a {
-    color: #3bc492;
+    color: #fff;
     word-wrap: break-word;
 
     -webkit-transition: color 0.1s ease-in, background 0.1s ease-in;
@@ -42,7 +55,8 @@ a {
 
 a:hover,
 a:focus {
-    color: #c0392b;
+    color: #fff;
+    opacity: .6;
     text-decoration: none;
     outline: 0;
 }
@@ -66,13 +80,25 @@ a:after {
 }
 
 
+.accordion-inner a{
+	color: black;
+	text-decoration: underline;
+}
+
+.accordion-group {
+	padding-bottom: 8px;
+}
+
 /* ==========================================================================
    Wrap Sections
    ========================================================================== */
 
 #headerwrap {
-	background-color: #4C4C4C;
+	background-image: url(../img/telstar.jpg);
+	background-position: center;
+	background-size:100%;
 	padding-top: 60px;
+	padding-bottom: 120px;
 }
 
 #headerwrap h1 {
@@ -108,6 +134,10 @@ a:after {
 #features {
 	padding-top: 50px;
 	padding-bottom: 50px;
+	background-image: url(../img/car.jpg);
+	background-position: center;
+	background-size: 100%
+	background-repeat: none;
 }
 
 #features .ac a{
@@ -118,7 +148,7 @@ a:after {
 
 #showcase {
 	display: block;
-	background-color: #4C4C4C;
+	background-color: #651FFF;
 	padding-top: 50px;
 	padding-bottom: 50px;
 }
@@ -128,11 +158,15 @@ a:after {
 }
 
 #footerwrap {
-	background-color: #800000;
+	background-color: #6200EA;
 	color: white;
 	padding-top: 40px;
 	padding-bottom: 60px;
 	text-align: left;
+}
+
+#footerwrap h1{
+	color:#fff;
 }
 
 #footerwrap h3 {
