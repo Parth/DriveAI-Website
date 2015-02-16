@@ -94,14 +94,21 @@
                 $('#leg-load').show();
                 $("#confirm-message").html("");
                 var sender_is_in_nj = autocomplete.getPlace().formatted_address.indexOf("NJ")>=0 || autocomplete.getPlace().formatted_address.indexOf("New Jersey")>=0;
+                $("#address-error").hide();
                 if (!sender_is_in_nj) {
+                    $("#your-text").hide();
+                    $("textarea").hide();
+                    $("#address-error").show();
                     $("#address-error").html("Sorry this is a form for NJ Residents only. Our goal is to support the bill in NJ Assembly so please tell your NJ friends!<br />");
                     $("#address-error").append("<br />"+tweet);
                     $("#address-error").append("<br />"+facebook_share+"<br />");
                     $("#address-error").append("<br /><span> Thank you for being super awesome :)</span>");
+                    $('#send-message').attr("disabled", "disabled");
                     return;
                 }
                 $('#send-message').removeAttr("disabled");
+                $("#your-text").show();
+                $("textarea").show();
 
 
                 var latlng = autocomplete.getPlace().geometry.location;
@@ -474,7 +481,7 @@
                   <input type="hidden" name="legislator-phone-2" id="leg-phone-2" />
                   <input type="hidden" name="legislator-district-2" id="leg-district-2" />
 
-                  <label>Your Text</label>
+                  <label id="your-text">Your Text</label>
                   <div id="emailer" class="row show-grid">
                       <div class="form-group col-md-12">
                         <textarea id="email-body" class="form-control" rows="10"></textarea>
