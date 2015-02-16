@@ -70,6 +70,9 @@
 
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
     <script type="text/javascript">
+        var tweet = "<a href='https://twitter.com/intent/tweet?text=Attention%20NJ%20Friends%21%20Please%20support%20%23NJAssemblyBillA1326%20to%20bring%20%23self-driving%20%23cars%20to%20NJ%3A%20http%3A%2F%2Fwww.driveai.com%2F&source=webclient'>Tweet your support!</a>";
+        var facebook_share = "<a href='https://www.facebook.com/sharer/sharer.php?src=bm&v=4&i=1424114041&u=http%3A%2F%2Fwww.driveai.com%2F&t=We%27re+making+self-driving+cars+in+New+Jersey%21+%7C+DriveAI.com'>Facebook Share your support!</a>"
+
         function initialize() {
             var input = document.getElementById('address');
             var options = {
@@ -89,6 +92,18 @@
                 $('#leg-containers').remove();
                 $('#email-body').remove();
                 $('#leg-load').show();
+                $("#confirm-message").html("");
+                var sender_is_in_nj = autocomplete.getPlace().formatted_address.indexOf("NJ")>0;
+                if (!sender_is_in_nj) {
+                    $("#address-error").html("Sorry this is a form for NJ Residents only. Our goal is to support the bill in NJ Assembly so please tell your NJ friends!<br />");
+                    $("#address-error").append("<br />"+tweet);
+                    $("#address-error").append("<br />"+facebook_share+"<br />");
+                    $("#address-error").append("<br /><span> Thank you for being super awesome :)</span>");
+                    return;
+                }
+                $('#send-message').removeAttr("disabled");
+
+
                 var latlng = autocomplete.getPlace().geometry.location;
                 var lat = latlng['k'];
                 var lng = latlng['D'];
@@ -450,6 +465,7 @@
 				    <label for="address1">Your Address</label>
 				    <input type="address" name="sender-address" class="form-control" id="address" placeholder="Enter address" required>
                     <i id="leg-load" class="fa fa-refresh fa-refresh-animate"></i>
+                    <div id="address-error"></div>
 				  </div>
                   <input type="hidden" name="legislator-email-1" id="leg-email-1" />
                   <input type="hidden" name="legislator-phone-1" id="leg-phone-1" />
@@ -471,7 +487,7 @@
                       </div>
                   </div>
 				  <br>
-				  <button id="send-message" type="submit" class="btn btn-large btn-success">SEND INVITE</button>
+				  <button id="send-message" type="submit" class="btn btn-large btn-success" disabled>SEND INVITE</button>
                   <div id="confirm-message"></div>
 				</form>
 			</div>
@@ -503,6 +519,8 @@
                success: function(data)
                {
                    $("#confirm-message").html("Achievement Unlocked: Story to tell your grandkids!");
+                   $("#confirm-message").append("<br />"+tweet);
+                   $("#confirm-message").append("<br />"+facebook_share+"<br />");
                    $("#send-message").prop('disabled', true);
                },
                error: function(data)
