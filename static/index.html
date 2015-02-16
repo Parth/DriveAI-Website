@@ -93,7 +93,7 @@
                 $('#email-body').remove();
                 $('#leg-load').show();
                 $("#confirm-message").html("");
-                var sender_is_in_nj = autocomplete.getPlace().formatted_address.indexOf("NJ")>0;
+                var sender_is_in_nj = autocomplete.getPlace().formatted_address.indexOf("NJ")>=0 || autocomplete.getPlace().formatted_address.indexOf("New Jersey")>=0;
                 if (!sender_is_in_nj) {
                     $("#address-error").html("Sorry this is a form for NJ Residents only. Our goal is to support the bill in NJ Assembly so please tell your NJ friends!<br />");
                     $("#address-error").append("<br />"+tweet);
