@@ -123,7 +123,7 @@
                     assembly_person_info = {};
 
                     var email = assembly_person['email'];
-                    var assembly_person_last_name = assembly_person['last_name'];
+                    var email_last_name = assembly_person['last_name'].replace(/ /g, '');
 
                     var assmbly_gender = '';
                     var assembly_person_gender = assembly_person['+gender'];
@@ -131,27 +131,21 @@
                     if (assembly_person_gender == 'Male') {
                         if(!email){
                             email = 'asm';
-                            email += assembly_person_last_name;
+                            email += email_last_name;
                             email += '@njleg.org';
                         }
                         assembly_person_info['gender'] = 'man';
                     } else if(assembly_person_gender == 'Female') {
                         if(!email){
                             email = 'asw';
-                            email += assembly_person_last_name;
+                            email += email_last_name;
                             email += '@njleg.org';
                         }
                         assembly_person_info['gender'] = 'woman';
                     } else {
                         if(!email) {
-                            /* email both male & female versions of email */
-                            email = 'asw';
-                            email += assembly_person_1_last_name;
-                            email += '@njleg.org, ';
-
-                            email = 'asm';
-                            email += assembly_person_1_last_name;
-                            email += '@njleg.org';
+                            /* Find email manually */
+                            email = 'community@driveai.com';
                         }
                         assembly_person_info['gender'] = 'person';
                     }
@@ -160,7 +154,7 @@
                     assembly_person_info['id'] = assembly_person['id'];
                     assembly_person_info['state'] = assembly_person['state'];
                     assembly_person_info['first_name'] = assembly_person['first_name'];
-                    assembly_person_info['last_name'] = assembly_person_last_name;
+                    assembly_person_info['last_name'] = assembly_person['last_name'];
                     assembly_person_info['district'] = assembly_person['district'];
                     assembly_person_info['photo_url'] = assembly_person['photo_url'];
                     assembly_person_info['phone'] = assembly_person['+phone'];
