@@ -47,7 +47,7 @@
     }
 	
         /* Loading Spinner... */
-        #leg-load, #email-body-1, #email-body-2 {
+        #leg-load {
             display: none;
         }
         .fa-refresh-animate {
@@ -70,9 +70,6 @@
 
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
     <script type="text/javascript">
-        var tweet = "<a href='https://twitter.com/intent/tweet?text=Attention%20NJ%20Friends%21%20Please%20support%20%23NJAssemblyBillA1326%20to%20bring%20%23self-driving%20%23cars%20to%20NJ%3A%20http%3A%2F%2Fwww.driveai.com%2F&source=webclient'>Tweet your support!</a>";
-        var facebook_share = "<a href='https://www.facebook.com/sharer/sharer.php?src=bm&v=4&i=1424114041&u=http%3A%2F%2Fwww.driveai.com%2F&t=We%27re+making+self-driving+cars+in+New+Jersey%21+%7C+DriveAI.com'>Facebook Share your support!</a>"
-
         function initialize() {
             var input = document.getElementById('address');
             var options = {
@@ -89,28 +86,8 @@
 
             var autocomplete = new google.maps.places.Autocomplete(input, options);
             google.maps.event.addListener(autocomplete, 'place_changed', function() {
-                $('#leg-containers').remove();
-                $('#email-body').remove();
+                $('#leg-info').remove();
                 $('#leg-load').show();
-                $("#confirm-message").html("");
-                var sender_is_in_nj = autocomplete.getPlace().formatted_address.indexOf("NJ")>=0 || autocomplete.getPlace().formatted_address.indexOf("New Jersey")>=0;
-                $("#address-error").hide();
-                if (!sender_is_in_nj) {
-                    $("#your-text").hide();
-                    $("textarea").hide();
-                    $("#address-error").show();
-                    $("#address-error").html("Sorry this is a form for NJ Residents only. Our goal is to support the bill in NJ Assembly so please tell your NJ friends!<br />");
-                    $("#address-error").append("<br />"+tweet);
-                    $("#address-error").append("<br />"+facebook_share+"<br />");
-                    $("#address-error").append("<br /><span> Thank you for being super awesome :)</span>");
-                    $('#send-message').attr("disabled", "disabled");
-                    return;
-                }
-                $('#send-message').removeAttr("disabled");
-                $("#your-text").show();
-                $("textarea").show();
-
-
                 var latlng = autocomplete.getPlace().geometry.location;
                 var lat = latlng['k'];
                 var lng = latlng['D'];
@@ -119,94 +96,77 @@
                     lat: lat, 
                     long: lng
                 }
-                var extractData = function(assembly_person){
-                    assembly_person_info = {};
-
-                    var email = assembly_person['email'];
-                    var email_last_name = assembly_person['last_name'].replace(/ /g, '');
-
-                    var assmbly_gender = '';
-                    var assembly_person_gender = assembly_person['+gender'];
-
-                    if (assembly_person_gender == 'Male') {
-                        if(!email){
-                            email = 'asm';
-                            email += email_last_name;
-                            email += '@njleg.org';
-                        }
-                        assembly_person_info['gender'] = 'man';
-                    } else if(assembly_person_gender == 'Female') {
-                        if(!email){
-                            email = 'asw';
-                            email += email_last_name;
-                            email += '@njleg.org';
-                        }
-                        assembly_person_info['gender'] = 'woman';
-                    } else {
-                        if(!email) {
-                            /* Find email manually */
-                            email = 'community@driveai.com';
-                        }
-                        assembly_person_info['gender'] = 'person';
-                    }
-
-                    assembly_person_info['email'] = email;
-                    assembly_person_info['id'] = assembly_person['id'];
-                    assembly_person_info['state'] = assembly_person['state'];
-                    assembly_person_info['first_name'] = assembly_person['first_name'];
-                    assembly_person_info['last_name'] = assembly_person['last_name'];
-                    assembly_person_info['district'] = assembly_person['district'];
-                    assembly_person_info['photo_url'] = assembly_person['photo_url'];
-                    assembly_person_info['phone'] = assembly_person['+phone'];
-                    assembly_person_info['party'] = assembly_person['party'];
-
-                    var email_body = 'Dear Assembly'+assembly_person_info['gender']+' '+assembly_person_info['last_name']+':\n\n';
-                    email_body += "I am a constituent that lives in your district and I am voicing my support for Assembly Bill A-1326 which would direct the NJ Motor Vehicle Commission (MVC) to establish a driver's license endorsement for the operation of autonomous vehicles in our state. \n\n"
-                        email_body += "I believe such a law would ensure that these vehicles adhere to MVC standards governing vehicle registration, safety, inspection, and insurance. Once enacted, the law ultimately will have a positive impact on commerce, offer more choices to consumers, and result in more jobs for New Jersey residents. There is a strong community of developers in New Jersey working on the technical challenges at Princeton University, Rutgers University, Munich Re Insurance, DriveAI.com, and derivatived.com\n\n";
-                    email_body += "As a supporter of their efforts and a strong proponent for New Jersey's economic development through high-tech, I encourage you to support this important bill for the future of New Jersey.\n\n";
-                    email_body += "Let's get back to being innovators again!\n\n";
-                    email_body += "Sincerely,\n";
-                    email_body += $('#name1').val();
-
-                    assembly_person_info['emailbody'] = email_body;
-
-                    return assembly_person_info;
-                }
-
                 j = $.getJSON("http://openstates.org/api/v1/legislators/geo/", 
                               params, 
                               function(data){
-                                 $('#leg-load').hide();
-
                                  var assembly_people = $.grep(data, function(obj, index) { 
                                       return obj['chamber'] == 'lower' 
                                   });
 
-                                  $('#address').after('<div id="leg-containers" class="row show-grid"></div>')
-                                  $('#leg-containers').append('<strong>Your Representatives:</strong><br/>');
+                                  var number_of_assembly_people = assembly_people.length;
+                                  var random_number = Math.floor(Math.random() * number_of_assembly_people); 
+                                  var random_assembly_person = assembly_people[random_number];
 
-                                  for (var idx=0; idx < assembly_people.length; idx++){
-                                      var assembly_person = extractData(assembly_people[idx]);
-                                      var elem_id_num = idx + 1;
-                                      var elem_id = "leg-info-"+elem_id_num;
-                                      var elem_id_selector = '#'+elem_id;
-                                      $('#leg-containers').append('<div id="'+elem_id+'" class="col-md-6"></div>');
-                                      var openstates_url = 'http://openstates.org/'+assembly_person['state']+'/legislators/'+assembly_person['id'];
-                                      $(elem_id_selector).append('<a target="_blank" href="'+openstates_url+'"><img id="leg-photo" width="100px" src="'+assembly_person['photo_url']+'" /></a>');
-                                      $(elem_id_selector).append('<div><b>Assembly'+assembly_person['gender']+'</b> '+assembly_person['first_name']+' '+assembly_person['last_name']+'</div>');
-                                      $(elem_id_selector).append('<div><b>District:</b> '+assembly_person['district']+'</div>');
-                                      $(elem_id_selector).append('<div><b>Email:</b> '+assembly_person['email']+'</div>');
-                                      var phone = assembly_person['phone'];
-                                      if(phone){
-                                          $(elem_id_selector).append('<div><b>Phone:</b> '+phone+'</div>');
-                                      };
-                                      $('#leg-email-'+elem_id_num).val(assembly_person['email']);
-                                      $('#leg-phone-'+elem_id_num).val(phone);
-                                      $('#leg-district-'+elem_id_num).val(assembly_person['district']);
-                                      $('#email-body-'+elem_id_num).val(assembly_person['emailbody']);
-                                      $('#email-body-'+elem_id_num).show();
+                                  var assembly_person_gender = random_assembly_person['+gender'];
+                                  var assmbly_gender = '';
+                                  var email = random_assembly_person['email'];
+                                  var random_assembly_person_last_name = random_assembly_person['last_name'];
+
+                                  if (assembly_person_gender == 'Male') {
+                                      if(!email){
+                                          email = 'asm';
+                                          email += random_assembly_person_last_name;
+                                          email += '@njleg.org';
+                                      }
+                                      assembly_gender = 'man'
+                                  } else if(assembly_person_gender == 'Female') {
+                                      if(!email){
+                                          email = 'asw';
+                                          email += random_assembly_person_last_name;
+                                          email += '@njleg.org';
+                                      }
+                                      assembly_gender = 'woman'
+                                  } else {
+                                      if(!email) {
+                                          /* email both male & female versions of email */
+                                          email = 'asw';
+                                          email += random_assembly_person_last_name;
+                                          email += '@njleg.org, ';
+
+                                          email = 'asm';
+                                          email += random_assembly_person_last_name;
+                                          email += '@njleg.org';
+                                      }
+                                      assembly_gender = 'person';
                                   }
 
+
+                                  var email_body = 'Dear Assembly'+assembly_gender+' '+random_assembly_person_last_name+':\n\n';
+                                  email_body += "I am a constituent that lives in your district and I am voicing my support for Assembly Bill A-1326 which would direct the NJ Motor Vehicle Commission (MVC) to establish a driver's license endorsement for the operation of autonomous vehicles in our state. \n\n"
+                                  email_body += "I believe such a law would ensure that these vehicles adhere to MVC standards governing vehicle registration, safety, inspection, and insurance. Once enacted, the law ultimately will have a positive impact on commerce, offer more choices to consumers, and result in more jobs for New Jersey residents. There is a strong community of developers in New Jersey working on the technical challenges at Princeton University, Rutgers University, Munich Re Insurance, DriveAI.com, and derivatived.com\n\n";
+                                  email_body += "As a supporter of their efforts and a strong proponent for New Jersey's economic development through high-tech, I encourage you to support this important bill for the future of New Jersey.\n\n";
+                                  email_body += "Let's get back to being innovators again!\n\n";
+                                  email_body += "Sincerely,\n";
+                                  email_body += $('#name1').val();
+
+                                  $('#email-body').val(email_body);
+
+                                  var phone = random_assembly_person['+phone'];
+                                  $('#leg-email').val(email);
+                                  $('#leg-phone').val(phone);
+                                  $('#leg-district').val(random_assembly_person['district']);
+                                  $('#leg-load').hide();
+                                  $('#address').after('<div id="leg-info"></div>');
+                                  $('#leg-info').append('<strong>Your Representative:</strong><br/>');
+                                  var openstates_url = 'http://openstates.org/'+random_assembly_person['state']+'/legislators/'+random_assembly_person['id'];
+                                  $('#leg-info').append('<a target="_blank" href="'+openstates_url+'"><img id="leg-photo" width="100px" src="'+random_assembly_person['photo_url']+'" /></a>');
+                                  $('#leg-info').append('<div><b>Assembly'+assembly_gender+'</b> '+random_assembly_person['first_name']+' '+random_assembly_person_last_name+'</div>');
+                                  $('#leg-info').append('<div><b>District:</b> '+random_assembly_person['district']+'</div>');
+                                  $('#leg-info').append('<div><b>Email:</b> '+email+'</div>');
+                                  if(phone){
+                                      $('#leg-info').append('<div><b>Phone:</b> '+phone+'</div>');
+                                  };
+                                  $('textarea').prop('rows', 20);
                               })
             });
         }
@@ -261,8 +221,8 @@
 	    		</div>
 	    		
 	    		<div class="col-lg-2">
-	    			<h5>Why does California get to have all of the fun?</h5>
-                    <p><strong><a href="#contact">New Jersey</a> has the talent, skill set, and brains to make this a state of innovation.</strong> </p>
+	    			<h5>NJ was an Innovation Powerhouse</h5>
+                    <p><strong>Over decades we have stagnated in driving technological progress. We must ask our <a href="#contact">legislators</a> to help push the boundaries again.</strong> </p>
 	    			<img class="hidden-xs hidden-sm hidden-md" src="assets/img/arrow1.png">
 	    		</div>
 	    		<div class="col-lg-8">
@@ -273,7 +233,7 @@
 	    			<img class="hidden-xs hidden-sm hidden-md" src="assets/img/arrow2.png">
 	    			
 	    			<h5>We need your help!</h5>
-                    <p><strong><a href="#contact">Contact your local legislator</a> to help this state take advantage of its potential.</strong></p>
+                    <p><strong>Contact your local legislator with <a href="#contact">one click!</a> And help New Jersey take advantage of its potential once again.</strong></p>
 	    		</div>
 	    	</div>
 	    </div> <!--/ .container -->
@@ -291,7 +251,7 @@
 	<div id="features">
 		<div class="container">
 			<div class="row">
-				<h1 class="centered">What's DriveAI?</h1>
+				<h1 class="centered">DriveAI - New Jersey's Pursuit for Autonomous Vehicles</h1>
 				<br>
 				<br>
 				<div class="col-lg-6 centered">
@@ -311,7 +271,7 @@
 		                    </div><!-- /accordion-heading -->
 		                    <div id="collapseOne" class="accordion-body collapse in">
 		                        <div class="accordion-inner">
-                                    <p>We are getting ready to map out 3D space with recently purchased sensors and test our algorithms. There are efforts in Princeton University overseen by Professor Kornhauser and in Rutgers University led by DriveAI and <a href="http://www.derivatived.com">derivative/d</a>. <a href="#contact">Encourage your Assembly Person</a> to pass <a href="http://www.njleg.state.nj.us/2014/Bills/A1500/1326_I1.HTM">NJ Assembly Bill A1326!</a></p>
+                                    <p>There are efforts at Princeton University overseen by Professor Kornhauser and at Rutgers University led by DriveAI and <a href="http://www.derivatived.com">derivative/d</a>. We are preparing to map out 3D space with recently acquired sensors and test our algorithms. <a href="#contact">Encourage your Assembly Person</a> to pass <a href="http://www.njleg.state.nj.us/2014/Bills/A1500/1326_I1.HTM">NJ Assembly Bill A1326</a>!</p>
 								</div><!-- /accordion-inner -->
 		                    </div><!-- /collapse -->
 		                </div><!-- /accordion-group -->
@@ -339,7 +299,7 @@
 		                    </div>
 		                    <div id="collapseThree" class="accordion-body collapse in">
 		                        <div class="accordion-inner">
-                                    <p>We have a car on the way and will have a demo ready by the summertime. <a href="#contact">We need your help getting through Assembly.</a></p>
+                                    <p>We have a vehicle on the way and will have a demo this summer. <a href="#contact">We need your help getting through Assembly.</a></p>
 								</div><!-- /accordion-inner -->
 		                    </div><!-- /collapse -->
 		                </div><!-- /accordion-group -->
@@ -353,7 +313,7 @@
 		                    </div>
 		                    <div id="collapseFour" class="accordion-body collapse in">
 		                        <div class="accordion-inner">
-                                    <p>We are an open source community and welcome the brightest minds around to offer their talents. We host <a href="http://www.meetup.com/self-driving-vehicles">Meetup</a> events between New York City and New Jersey where we have ambitious people share their own projects and advance the progress of the autonomous vehicle. Feel free to join and <a href="#contact">ask your Assembly Person to join too<a>!</p>
+                                    <p>We are an open source community and welcome the brightest minds around to offer their talents. We host <a href="http://www.meetup.com/self-driving-vehicles">Meetup</a> events between New York City and New Jersey where we have ambitious people share their own projects and advance the progress of the autonomous vehicle. You're welcome to join and don't forget to <a href="#contact">ask your Assemblyperson to join too<a>!</p>
 								</div><!-- /accordion-inner -->
 		                    </div><!-- /collapse -->
 		                </div><!-- /accordion-group -->
@@ -388,7 +348,7 @@
                     </a>
 
                     <div class="img-caption">
-                        <span>Assemblywoman Quijano</span>
+                        <span>Assemblyman Quijano</span>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -456,39 +416,26 @@
 				<form role="form" method="post" enctype="plain" id="legislator-email-form"> 
 				  <div class="form-group">
 				    <label for="name1">Your Name</label>
-				    <input type="name" name="sender-name" class="form-control" id="name1" placeholder="Your Name" required>
+				    <input type="name" name="Name" class="form-control" id="name1" placeholder="Your Name" required>
 				  </div>
 				  <div class="form-group">
 				    <label for="email1">Your Email address</label>
-				    <input type="email" name="sender-email" class="form-control" id="email1" placeholder="Enter email" required>
+				    <input type="email" name="Mail" class="form-control" id="email1" placeholder="Enter email" required>
 				  </div>
 				  <div class="form-group">
-				    <label for="address1">Your Home Address</label>
-				    <input type="address" name="sender-address" class="form-control" id="address" placeholder="Enter address" required>
+				    <label for="address1">Your Address</label>
+				    <input type="address" name="Address" class="form-control" id="address" placeholder="Enter address" required>
                     <i id="leg-load" class="fa fa-refresh fa-refresh-animate"></i>
-                    <div id="address-error"></div>
 				  </div>
-                  <input type="hidden" name="legislator-email-1" id="leg-email-1" />
-                  <input type="hidden" name="legislator-phone-1" id="leg-phone-1" />
-                  <input type="hidden" name="legislator-district-1" id="leg-district-1" />
-                  <input type="hidden" name="legislator-email-2" id="leg-email-2" />
-                  <input type="hidden" name="legislator-phone-2" id="leg-phone-2" />
-                  <input type="hidden" name="legislator-district-2" id="leg-district-2" />
-
-                  <label id="your-text">Your Emails: </label>
-                  <div id="emailer" class="row show-grid">
-                      <div class="form-group col-md-12">
-                        <textarea id="email-body" class="form-control" rows="10"></textarea>
-                      </div>
-                      <div class="form-group col-md-6">
-                        <textarea id="email-body-1" class="form-control" name="leg-message-1" rows="10"></textarea>
-                      </div>
-                      <div class="form-group col-md-6">
-                        <textarea id="email-body-2" class="form-control" name="leg-message-2" rows="10"></textarea>
-                      </div>
-                  </div>
+                  <input type="hidden" name="legislator_email" id="leg-email" />
+                  <input type="hidden" name="legislator_phone" id="leg-phone" />
+                  <input type="hidden" name="legislator_district" id="leg-district" />
+				  <div class="form-group">
+				  	<label>Your Text</label>
+				  	<textarea id="email-body" class="form-control" name="Message" rows="10"></textarea>
+				  </div>
 				  <br>
-				  <button id="send-message" type="submit" class="btn btn-large btn-success" disabled>SEND INVITE</button>
+				  <button id="send-message" type="submit" class="btn btn-large btn-success">SEND INVITE</button>
                   <div id="confirm-message"></div>
 				</form>
 			</div>
@@ -520,8 +467,6 @@
                success: function(data)
                {
                    $("#confirm-message").html("Achievement Unlocked: Story to tell your grandkids!");
-                   $("#confirm-message").append("<br />"+tweet);
-                   $("#confirm-message").append("<br />"+facebook_share+"<br />");
                    $("#send-message").prop('disabled', true);
                },
                error: function(data)
