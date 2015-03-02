@@ -522,6 +522,7 @@
                success: function(data)
                {
                    $("#confirm-message").html("Achievement Unlocked: Story to tell your grandkids!");
+                   $("#confirm-message").append("<br /> Note: You may get two emails per assembly person as confirmation. Only one email per assembly person has been sent.");
                    $("#confirm-message").append("<br />"+tweet);
                    $("#confirm-message").append("<br />"+facebook_share+"<br />");
                    $("#send-message").prop('disabled', true);
