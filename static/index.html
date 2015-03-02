@@ -124,6 +124,7 @@
 
                     var email = assembly_person['email'];
                     var email_last_name = assembly_person['last_name'].replace(/ /g, '');
+                    var email_last_name = assembly_person['last_name'].replace(/'/g, '');
 
                     var assmbly_gender = '';
                     var assembly_person_gender = assembly_person['+gender'];
